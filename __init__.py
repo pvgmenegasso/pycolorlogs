@@ -1,8 +1,19 @@
-from distutils.debug import DEBUG
 import logging
 from typing import Optional
+from dataclasses import dataclass
 
-from colors import bcolors
+@dataclass
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 class ColorFormatter(logging.Formatter):
 
@@ -26,8 +37,6 @@ class ColorFormatter(logging.Formatter):
             return newformat.format(record)
        
 
-
-
 def init_logs(severity : int):
 
     try:
@@ -43,7 +52,6 @@ def init_logs(severity : int):
     except:
         Warning('Log severity level not found')
 
-    
     log = logging.getLogger()
     log.setLevel(severity)
     sh = logging.StreamHandler()
