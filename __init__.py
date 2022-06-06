@@ -21,12 +21,13 @@ class bcolors:
 class ColorFormatter(logging.Formatter):
 
     BASEFORMAT : str = f'%(asctime)s %(filename)s | %(levelname)s:'
+    EXTENDEDFORMAT : str = f'%(asctime)s %(filename)s line %(lineno)d | %(levelname)s:'
     MESSAGE : str = f'%(message)s'
     FORMATS = {
             logging.INFO : f'{bcolors.OKBLUE}{BASEFORMAT}{bcolors.ENDC} {MESSAGE}',
             logging.DEBUG : f'{bcolors.OKGREEN}{BASEFORMAT}{bcolors.ENDC} {MESSAGE}',
-            logging.WARNING : f'{bcolors.WARNING}{BASEFORMAT}{bcolors.ENDC} {MESSAGE}',
-            logging.ERROR : f'{bcolors.FAIL}{bcolors.BOLD}{BASEFORMAT}{bcolors.ENDC} {MESSAGE}'
+            logging.WARNING : f'{bcolors.WARNING}{EXTENDEDFORMAT}{bcolors.ENDC} {MESSAGE}',
+            logging.ERROR : f'{bcolors.FAIL}{bcolors.BOLD}{EXTENDEDFORMAT}{bcolors.ENDC} {MESSAGE}'
         }
     DATEFMT = '%d/%m-%X'
 
