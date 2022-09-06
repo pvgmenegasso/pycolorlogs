@@ -16,8 +16,6 @@ class bcolors:
     MAGENTA="\033[35m"
     BRIGHTRED="\033[31;1m"
 
-
-
 class ColorFormatter(logging.Formatter):
 
     BASEFORMAT : str = f'%(asctime)s %(filename)s | %(levelname)s:'
