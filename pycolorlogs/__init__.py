@@ -1,5 +1,4 @@
-from colors import (
-    AscIIColors as AscIIColors,
+from pycolorlogs.colors import ( AscIIColors as AscIIColors,
     ColorFormatter as ColorFormatter,
     init_logs as init_logs
     )

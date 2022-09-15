@@ -1,5 +1,8 @@
+from inspect import currentframe, getframeinfo
+import inspect
 import logging
-from typing import ClassVar, Dict, Literal, Optional, Tuple, Union
+from typing import ClassVar, Dict, Optional, TextIO, Tuple, Union
+from typing_extensions import Literal
 from dataclasses import dataclass
 
 BRIGHT_OPT = (';', 1)
@@ -60,7 +63,7 @@ class AscIIColors:
 
     @classmethod
     def make_color(cls, color_name : Union[str, int]) -> str:
-        aux_map : Tuple[str, int] | None = None
+        aux_map : Optional[Tuple[str, int]] = None
         if isinstance(color_name, str):
             if color_name.count('bright') > 0:
                 aux_map = BRIGHT_OPT
@@ -70,10 +73,11 @@ class AscIIColors:
         if isinstance(color_name, int):
             if color_name in list(AscIIColors.CODES.values()):
                 return AscIIColors.parse_fmt(color_id=color_name, opt=aux_map)
+        return AscIIColors.parse_fmt(color_id = 10)
+
         for entry in inspect.stack(10):
             print(entry.frame.f_locals)
-
-        print(getframeinfo(frame =currentframe() ,context=10))    
+        print(getframeinfo(frame =currentframe(), context=10))    
         raise IndexError('Invalid color name !')
 
 @dataclass
@@ -103,7 +107,7 @@ class ColorFormatter(logging.Formatter):
     ENDC: ClassVar[Union[str , int]] = '\033[0m'
     
     BASEFORMAT : ClassVar[str] = f'%(asctime)s %(filename)s | %(levelname)s:'
-    EXTENDEDFORMAT : ClassVar[str] = f'%(asctime)s %(filename)s line %(lineno)d | %(levelname)s:'
+    EXTENDEDFORMAT : ClassVar[str] = f'%(asctime)s %(filename)s l:%(lineno)d | %(levelname)s:'
     MESSAGE : ClassVar[str] = f'%(message)s'
     
 
@@ -115,17 +119,21 @@ class ColorFormatter(logging.Formatter):
         }
     DATEFMT : ClassVar[str] = '%d/%m-%X'
 
-    def __init__(self, fmt: Optional[str] = ..., datefmt: Optional[str] = ..., validate: bool = ...) -> None:
-        super().__init__()
+    def __init__(self, fmt: Optional[str] = None, datefmt: Optional[str] = None, validate: bool = False) -> None:
+        super().__init__(
+            fmt      = fmt,
+            datefmt  = datefmt, 
+            validate = validate)
 
-    def format(self, record: Optional[logging.LogRecord]) -> str:
-        if record is not None:
-            newformat = logging.Formatter(fmt = self.FORMATS.get(record.levelno)
-            , datefmt=self.DATEFMT)
-            return newformat.format(record)
+    def format(self, record: logging.LogRecord) -> str:
+        newformat = logging.Formatter(
+            fmt = self.FORMATS.get(record.levelno),
+            datefmt=self.DATEFMT
+        )
+        return newformat.format(record)
  
 
-def init_logs(severity : int):
+def init_logs(severity : int) -> None:
 
     try:
         assert severity in (
@@ -140,11 +148,11 @@ def init_logs(severity : int):
     except:
         Warning('Log severity level not found')
 
-    log = logging.getLogger()
+    log: logging.Logger = logging.getLogger()
     log.setLevel(severity)
-    sh = logging.StreamHandler()
+    sh: logging.StreamHandler[TextIO] = logging.StreamHandler()
     sh.setFormatter(ColorFormatter())
-    log.removeHandler(*log.handlers)
+    log.removeHandler(log.handlers)
     log.addHandler(sh)
 
 
