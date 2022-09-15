@@ -4,7 +4,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'pycolorlogs'
-version = '1.1.0'
+version = '1.1.1'
 description = 'Extends default python logging package to include 256-bit terminal colors'
 readme = 'README.md'
 authors = [{ name = 'Pedro Menegasso', email='pvgmenegasso@gmail.com'}]
