@@ -64,14 +64,20 @@ info('Done !')
 ```
 
 this outputs:
-<html>
-<body style="font-family:'Hack',monospace;font-size:10pt;color:#c3c7d1;background-color:#1a1e21;"><br><span style="color:#7cb7ff;background-color:#1a1e21;">15/09-07:54:55 example.py | INFO:</span><span style="color:#c3c7d1;background-color:#1a1e21;"> Starting program...
-</span><br><span style="color:#cae7b9;background-color:#1a1e21;">15/09-07:54:55 example.py | DEBUG:</span><span style="color:#c3c7d1;background-color:#1a1e21;"> The result is 8
-</span><br><span style="font-weight:bold;color:#f67e7d;background-color:#1a1e21;">15/09-07:54:55 example.py l:17 | ERROR:</span><span style="color:#c3c7d1;background-color:#1a1e21;"> Can't divide by 0 !!</span>
+
+<body style="font-size:10pt;color:#c3c7d1;background-color:#1a1e21;">
+<br></br>
+<span style="color:#7cb7ff;">15/09-07:54:55 example.py | INFO:</span>
+<span style="color:#c3c7d1;"> Starting program...</span>
+<br></br>
+<span style="color:#cae7b9;">15/09-07:54:55 example.py | DEBUG:</span>
+<span style="color:#c3c7d1;"> The result is 8</span>
+<br></br>
+<span style="font-weight:bold;color:#f67e7d;">15/09-07:54:55 example.py l:17 | ERROR:</span>
+<span style="color:#c3c7d1;"> Can't divide by 0 !!</span>
 <br>
 </br>
 </body>
-</html>
 
 -------------------
 
