@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 typing-extensions = "*"
+pytest = "*"
 
 [dev-packages]
-
-
