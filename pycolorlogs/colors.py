@@ -1,9 +1,14 @@
-from inspect import currentframe, getframeinfo
-import inspect
 import logging
 from typing import ClassVar, Dict, Optional, TextIO, Tuple, Union
-from typing_extensions import Literal
 from dataclasses import dataclass
+from sys import version_info
+
+
+if version_info.major > 2:
+    if version_info.minor < 10:
+        from typing_extensions import Literal
+    else:
+        from typing import Literal
 
 BRIGHT_OPT = (';', 1)
 
@@ -15,7 +20,7 @@ class AscIIColors:
     CODES : ClassVar[Dict[str, int]] = {
         'bold' : 1,
         'light' : 2,
-        'italic' : 3,        
+        'italic' : 3,
         'underline' : 4,
         'blinking' : 5,
         'white_bg' : 7,
@@ -62,7 +67,10 @@ class AscIIColors:
         return AscIIColors.COLORFMT.format_map(map)
 
     @classmethod
-    def make_color(cls, color_name : Union[str, int]) -> str:
+    def make_color(
+        cls, 
+        color_name : Union[str, int, Tuple[int, int]]
+    ) -> str:
         aux_map : Optional[Tuple[str, int]] = None
         if isinstance(color_name, str):
             if color_name.count('bright') > 0:
@@ -73,6 +81,10 @@ class AscIIColors:
         if isinstance(color_name, int):
             if color_name in list(AscIIColors.CODES.values()):
                 return AscIIColors.parse_fmt(color_id=color_name, opt=aux_map)
+        if isinstance(color_name, Tuple):
+            if isinstance(color_name[0], int):
+                if color_name[0] in list(AscIIColors.CODES.values()):
+                    return AscIIColors.parse_fmt(color_id=color_name[0], opt=BRIGHT_OPT)
         return AscIIColors.parse_fmt(color_id = 10)
 
         for entry in inspect.stack(10):
@@ -94,7 +106,7 @@ class ColorFormatter(logging.Formatter):
     # MAGENTA : Literal["\033[35m"] = '\033[35m'
     # BRIGHTRED : Literal["\033[31;1m"] = '\033[31;1m'
     
-    OKBLUE : ClassVar[Union[str, int]] = AscIIColors.make_color(34)
+    OKBLUE : ClassVar[Union[str, int]] = AscIIColors.make_color((34, 1))
     HEADER : ClassVar[Union[str , int]] = AscIIColors.make_color(35)
     OKCYAN : ClassVar[Union[str , int]] = AscIIColors.make_color(36)
     OKGREEN : ClassVar[Union[str , int]] = AscIIColors.make_color(32)
@@ -102,7 +114,7 @@ class ColorFormatter(logging.Formatter):
     FAIL: ClassVar[Union[str , int]] = AscIIColors.make_color(8)
     BOLD: ClassVar[Union[str , int]] = AscIIColors.make_color(1)
     UNDERLINE: ClassVar[Union[str , int]] = AscIIColors.make_color(4)
-    MAGENTA: ClassVar[Union[str , int]] = AscIIColors.make_color(35)
+    MAGENTA: ClassVar[Union[str , int]] = AscIIColors.make_color((35, 1))
     BRIGHTRED: ClassVar[Union[str , int]] = AscIIColors.make_color('brightred')
     ENDC: ClassVar[Union[str , int]] = '\033[0m'
     
@@ -114,16 +126,20 @@ class ColorFormatter(logging.Formatter):
     FORMATS : ClassVar[Dict[int, str]] = {
             logging.INFO : f'{OKBLUE}{BASEFORMAT}{ENDC} {MESSAGE}',
             logging.DEBUG : f'{OKGREEN}{BASEFORMAT}{ENDC} {MESSAGE}',
-            logging.WARNING : f'{WARNING}{BASEFORMAT}{ENDC} {MESSAGE}',
-            logging.ERROR : f'{BRIGHTRED}{EXTENDEDFORMAT}{ENDC} {MESSAGE}'
+            logging.WARNING : f'{WARNING}{BOLD}{BASEFORMAT}{ENDC} {MESSAGE}',
+            logging.ERROR : f'{BRIGHTRED}{BOLD}{EXTENDEDFORMAT}{ENDC} {MESSAGE}'
         }
     DATEFMT : ClassVar[str] = '%d/%m-%X'
 
-    def __init__(self, fmt: Optional[str] = None, datefmt: Optional[str] = None, validate: bool = False) -> None:
+    def __init__(
+        self, 
+        fmt: Optional[str] = None, 
+        datefmt: Optional[str] = None
+    ) -> None:
         super().__init__(
             fmt      = fmt,
-            datefmt  = datefmt, 
-            validate = validate)
+            datefmt  = datefmt
+        )
 
     def format(self, record: logging.LogRecord) -> str:
         newformat = logging.Formatter(
@@ -154,5 +170,3 @@ def init_logs(severity : int) -> None:
     sh.setFormatter(ColorFormatter())
     log.removeHandler(log.handlers)
     log.addHandler(sh)
-
-

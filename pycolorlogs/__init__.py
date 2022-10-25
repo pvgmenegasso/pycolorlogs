@@ -11,13 +11,10 @@ from logging import (
     FATAL     as FATAL, 
     CRITICAL  as CRITICAL, 
     WARNING   as WARNING, 
-    WARN      as WARN,
     # logging functions
     info      as info, 
     debug     as debug, 
     error     as error, 
     warning   as warning,
-    warn      as warn,
     critical  as critical, 
-    fatal     as fatal,
     exception as exception)

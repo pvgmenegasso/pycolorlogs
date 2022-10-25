@@ -2,6 +2,7 @@ from pycolorlogs.colors import init_logs
 from pycolorlogs import info, debug, error, warning, INFO, DEBUG, ERROR
 
 
+
 init_logs(DEBUG)
 
 info(f'This is an INFOrmational log message')
