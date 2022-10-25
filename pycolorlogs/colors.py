@@ -118,17 +118,21 @@ class ColorFormatter(logging.Formatter):
     BRIGHTRED: ClassVar[Union[str , int]] = AscIIColors.make_color('brightred')
     ENDC: ClassVar[Union[str , int]] = '\033[0m'
     
-    BASEFORMAT : ClassVar[str] = f'%(asctime)s %(filename)s | %(levelname)s:'
-    EXTENDEDFORMAT : ClassVar[str] = f'%(asctime)s %(filename)s l:%(lineno)d | %(levelname)s:'
+    BASEFORMAT : ClassVar[str] = (
+        f'%(asctime)s %(filename)s | %(levelname)s:'
+    )
+    EXTENDEDFORMAT : ClassVar[str] = (
+        f'%(asctime)s %(filename)s l:%(lineno)d | %(levelname)s:'
+    )
     MESSAGE : ClassVar[str] = f'%(message)s'
     
 
     FORMATS : ClassVar[Dict[int, str]] = {
-            logging.INFO : f'{OKBLUE}{BASEFORMAT}{ENDC} {MESSAGE}',
-            logging.DEBUG : f'{OKGREEN}{BASEFORMAT}{ENDC} {MESSAGE}',
-            logging.WARNING : f'{WARNING}{BOLD}{BASEFORMAT}{ENDC} {MESSAGE}',
-            logging.ERROR : f'{BRIGHTRED}{BOLD}{EXTENDEDFORMAT}{ENDC} {MESSAGE}'
-        }
+        logging.INFO : f'{OKBLUE}{BASEFORMAT}{ENDC} {MESSAGE}',
+        logging.DEBUG : f'{OKGREEN}{BASEFORMAT}{ENDC} {MESSAGE}',
+        logging.WARNING : f'{WARNING}{BOLD}{BASEFORMAT}{ENDC} {MESSAGE}',
+        logging.ERROR : f'{BRIGHTRED}{BOLD}{EXTENDEDFORMAT}{ENDC} {MESSAGE}'
+    }
     DATEFMT : ClassVar[str] = '%d/%m-%X'
 
     def __init__(
@@ -168,5 +172,6 @@ def init_logs(severity : int) -> None:
     log.setLevel(severity)
     sh: logging.StreamHandler[TextIO] = logging.StreamHandler()
     sh.setFormatter(ColorFormatter())
-    log.removeHandler(log.handlers)
+    for handler in log.handlers:
+        log.removeHandler(handler)
     log.addHandler(sh)

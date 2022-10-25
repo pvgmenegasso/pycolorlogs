@@ -1,13 +1,9 @@
-from pycolorlogs.colors import init_logs
-from pycolorlogs import info, debug, error, warning, INFO, DEBUG, ERROR
-
-
+from pycolorlogs import init_logs, info, debug, error, warning, DEBUG
 
 init_logs(DEBUG)
 
 info(f'This is an INFOrmational log message')
 info(f'Use this on messages that are central to understanding your program\'s current workflow')
-
 
 debug(f'This is a debug message, it usually should provide more verbose low level insight into the')
 debug(f'inner workings of your program in order to check execution bugs and detailed run info')
